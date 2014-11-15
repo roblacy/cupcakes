@@ -18,7 +18,7 @@ ACCESS_TOKEN_SECRET = 'ACCESS TOKEN SECRET HERE'
 MAX_FETCH_AMOUNT = 365
 FETCH_SIZE = 200
 SCREEN_NAME = 'gtowncupcake'
-FLAVOR_REGEX = re.compile('flavor is #DCCupcakes\s+(?P<flavor>.*)! Order')
+FLAVOR_REGEX = re.compile('flavor is\s+((\#|\@)\w+\s+)?(?P<flavor>[^!]*)!* Order')
 HTML_PARSER = HTMLParser.HTMLParser()
 
 
@@ -56,6 +56,7 @@ def process_row(row, flavors):
     flavor_name = parse_flavor(row.text)
     if flavor_name:
         flavor_name = HTML_PARSER.unescape(flavor_name)
+        flavor_name = flavor_name.replace('"', '')
         date = date_parser.parse(row.created_at)
         flavors.append([
             flavor_name,
